@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResponseDataModel: Decodable {
+struct WeatherResponseDataModel: Decodable {
     let city: String
     let weather: [WeatherDataModel]
     let temperature: TemperatureDataModel
