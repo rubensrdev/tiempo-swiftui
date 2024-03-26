@@ -10,40 +10,41 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var weatherViewModel = WeatherViewModel()
+    @State var cityToSearh: String = "jaen"
     
     var body: some View {
         ZStack {
             VStack {
-                Text(weatherViewModel.weatherResponseDataModel?.city ?? "No city")
+                Text(weatherViewModel.weatherModel.city)
                     .foregroundStyle(.white)
                     .font(.system(size: 70))
-                Text(weatherViewModel.weatherResponseDataModel?.weather.first?.description ?? "No description")
+                Text(weatherViewModel.weatherModel.description)
                     .foregroundStyle(.white)
                     .font(.headline)
                     .padding(.bottom, 8)
                 HStack {
-                    if let iconURL = weatherViewModel.weatherResponseDataModel?.weather.first?.iconURLString, let url = URL(string: "http://openweathermap.org/img/wn/\(iconURL)@2x.png") {
+                    if let url = weatherViewModel.weatherModel.iconURL {
                         AsyncImage(url: url) { image in
                             image
                         } placeholder: {
                             ProgressView()
                         }
                     }
-                    Text("\(weatherViewModel.weatherResponseDataModel?.temperature.currentTemperature ?? 0.0)º")
+                    Text(weatherViewModel.weatherModel.currentTemperature)
                         .font(.system(size: 70))
                         .foregroundStyle(.white)
                 }
                 .padding(.top, -20)
                 HStack(spacing: 14) {
-                    Label("\(weatherViewModel.weatherResponseDataModel?.temperature.maxTemperature ?? 0.0)º", systemImage: "thermometer.sun.fill")
-                    Label("\(weatherViewModel.weatherResponseDataModel?.temperature.minTemperature ?? 0.0)º", systemImage: "thermometer.snowflake")
+                    Label(weatherViewModel.weatherModel.maxTemperature, systemImage: "thermometer.sun.fill")
+                    Label(weatherViewModel.weatherModel.minTemperature, systemImage: "thermometer.snowflake")
                 }
                 .symbolRenderingMode(.multicolor)
                 .foregroundStyle(.white)
                 Divider()
                     .foregroundStyle(.white)
                     .padding()
-                Label("\(weatherViewModel.weatherResponseDataModel?.temperature.humidity ?? 0) %", systemImage: "humidity.fill")
+                Label(weatherViewModel.weatherModel.humidity, systemImage: "humidity.fill")
                     .symbolRenderingMode(.multicolor)
                     .foregroundStyle(.white)
                 Spacer()
@@ -51,10 +52,10 @@ struct ContentView: View {
             .padding(.top, 32)
         }
         .background(
-            LinearGradient(colors: [.blue, .purple, .pink], startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(colors: [.blue, .indigo, .mint], startPoint: .topLeading, endPoint: .bottomTrailing)
         )
         .task {
-            await weatherViewModel.getWeather(city: "jaen")
+            await weatherViewModel.getWeather(city: cityToSearh)
         }
     }
 }

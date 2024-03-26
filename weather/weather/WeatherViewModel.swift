@@ -11,7 +11,8 @@ import Foundation
 
 final class WeatherViewModel: ObservableObject{
     
-    @Published var weatherResponseDataModel: WeatherResponseDataModel?
+    @Published var weatherModel: WeatherModel = .empty
+    private let weatherModelMapper: WeatherModelMapper = WeatherModelMapper()
     
     /*
      LLamamos al endpoint http de tiempo para la ciudad pasada por parametro
@@ -26,7 +27,7 @@ final class WeatherViewModel: ObservableObject{
             let dataModel = try! await JSONDecoder().decode(WeatherResponseDataModel.self, from: data)
             // asignación
             DispatchQueue.main.async {
-                self.weatherResponseDataModel = dataModel
+                self.weatherModel = self.weatherModelMapper.mapDataModelToModel(dataModel: dataModel )
             }
         
         } catch {
