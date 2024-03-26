@@ -12,6 +12,10 @@ struct WeatherModelMapper {
         guard let weather = dataModel.weather.first else {
             return .empty
         }
+        
+        let sunsetWithTimezone = dataModel.sun.sunset.addingTimeInterval(dataModel.timezone - Double(TimeZone.current.secondsFromGMT()))
+        let sunrisetWithTimezone = dataModel.sun.sunrise.addingTimeInterval(dataModel.timezone - Double(TimeZone.current.secondsFromGMT()))
+        
         return WeatherModel(city: dataModel.city,
                             weather: weather.main,
                             description: "\(weather.description)",
@@ -19,6 +23,8 @@ struct WeatherModelMapper {
                             currentTemperature: "\(Int(dataModel.temperature.currentTemperature))º",
                             minTemperature: "\(Int(dataModel.temperature.minTemperature))º Min.",
                             maxTemperature: "\(Int(dataModel.temperature.maxTemperature))º Max.",
-                            humidity: "\(dataModel.temperature.humidity) %")
+                            humidity: "\(dataModel.temperature.humidity) %",
+                            sunset: sunsetWithTimezone,
+                            sunrise: sunrisetWithTimezone)
     }
 }

@@ -16,8 +16,9 @@ struct WeatherModel {
     let minTemperature: String
     let maxTemperature: String
     let humidity: String
-    
+    let sunset: Date
+    let sunrise: Date
     // esta será la mostrada mientras se cargan los datos y realiza la petición HTTP
-    static let empty: WeatherModel = .init(city: "No City", weather: "No Weather", description: "No Description", iconURL: nil, currentTemperature: "0º", minTemperature: "0º Min", maxTemperature: "0º Max", humidity: "0%")
+    static let empty: WeatherModel = .init(city: "No City", weather: "No Weather", description: "No Description", iconURL: nil, currentTemperature: "0º", minTemperature: "0º Min", maxTemperature: "0º Max", humidity: "0%", sunset: .now, sunrise: .now)
     
 }
