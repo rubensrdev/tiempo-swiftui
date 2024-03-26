@@ -9,7 +9,9 @@ import Foundation
 
 // https://api.openweathermap.org/data/2.5/weather?q=jaen&appid=71c3e78149e90edcb26b5c8bf57708fa&units=metric&lang=es&ref=swiftbeta.com
 
-final class WeatherViewModel {
+final class WeatherViewModel: ObservableObject{
+    
+    @Published var weatherResponseDataModel: WeatherResponseDataModel?
     
     /*
      LLamamos al endpoint http de tiempo para la ciudad pasada por parametro
@@ -18,9 +20,15 @@ final class WeatherViewModel {
     func getWeather(city: String) async {
         let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=71c3e78149e90edcb26b5c8bf57708fa&units=metric&lang=es&ref=swiftbeta.com")
         do {
+            // petición
             async let (data, _) =  try await URLSession.shared.data(from: url!)
+            // mapeo
             let dataModel = try! await JSONDecoder().decode(WeatherResponseDataModel.self, from: data)
-            print(dataModel)
+            // asignación
+            DispatchQueue.main.async {
+                self.weatherResponseDataModel = dataModel
+            }
+        
         } catch {
             print(error.localizedDescription)
         }
