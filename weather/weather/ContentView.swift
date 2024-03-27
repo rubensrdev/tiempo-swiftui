@@ -15,6 +15,32 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             VStack {
+                TextField("Ciudad a buscar", text: $cityToSearh)
+                    .keyboardType(.default)
+                    .autocorrectionDisabled()
+                    .padding(10)
+                    .font(.headline)
+                    .background(Color.teal.opacity(0.3))
+                    .cornerRadius(6)
+                    .padding(.horizontal, 60)
+                    .padding(.bottom, 20)
+                    .foregroundStyle(.white)
+                Button(
+                    action: {
+                        print("Pulsado botón buscar con ciudad -> \(cityToSearh)")
+                        Task {
+                            await weatherViewModel.getWeather(city: cityToSearh)
+                        }
+                    }
+                    ,
+                    label:{
+                        Text("Buscar")
+                            .foregroundStyle(.white)
+                            .background(Color.teal.opacity(0.3))
+                            .font(.title2)
+                    }
+                )
+                Divider()
                 Text(weatherViewModel.weatherModel.city)
                     .foregroundStyle(.white)
                     .font(.system(size: 70))
@@ -68,9 +94,6 @@ struct ContentView: View {
         .background(
             LinearGradient(colors: [.blue, .indigo, .mint], startPoint: .topLeading, endPoint: .bottomTrailing)
         )
-        .task {
-            await weatherViewModel.getWeather(city: cityToSearh)
-        }
     }
 }
 
